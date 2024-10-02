@@ -1,0 +1,115 @@
+#include<iostream>
+using namespace std;
+class Node{
+    public:
+    int data;
+    Node* next;
+
+    Node(int data){
+        this ->data = data;
+        this ->next = NULL;
+    }
+    //destructor
+    ~Node(){
+        int value = this -> data;
+        if(this->next != NULL){
+            delete next;
+            this->next = NULL;
+        }
+        cout<<"Memory is free for node with data "<<value<<endl;
+    }
+};
+//Insert at HEAD
+void InsertAtHead(Node* &head,int d){
+    Node* temp = new Node(d);
+    temp -> next = head;
+    head=temp;
+}
+//Insert at TAIL
+void InsertAtTail(Node* &tail,int d){
+    Node* temp = new Node(d);
+    tail -> next = temp;
+    tail = temp;
+}
+//Insert At POSITION
+void InsertAtposition(Node* &head,Node* &tail,int d,int position){
+    if(position == 1){
+        InsertAtHead(head,d);
+        return;
+    }
+     Node* temp = head;
+     int count = 1;
+     while(count<position - 1){
+        temp=temp->next;
+        count++;
+     }
+     //inserting at last position
+     if(temp -> next == NULL){
+        InsertAtTail(tail,d);
+        return;
+     }
+      //creating a node for d
+      Node* nodeToInsert = new Node(d);
+      nodeToInsert -> next = temp -> next;
+      temp -> next = nodeToInsert;
+}
+void print(Node* &head){
+    Node* temp = head;
+    while(temp != NULL){
+        cout<<temp->data<<endl;
+        temp = temp ->next;
+    }
+    cout<<endl;
+};
+void DeleteNode(int position,Node* &head){
+    if(position == 1){
+        //Deleting at frist or start node
+        Node* temp =head;
+        head = head -> next;
+       //memory free start node
+       temp ->next = NULL;
+        delete temp;
+    }
+    else{
+     //Delete at any position and end
+    Node* curr = head;
+    Node* prev = NULL;
+
+    int count =1;
+    while(count < position){
+       prev = curr;
+       curr = curr -> next;
+       count++;
+    }
+
+    prev -> next = curr -> next;
+    curr -> next = NULL;
+    delete curr; //curr--current
+    }
+}
+
+int main(){
+    Node* node1 = new Node(10);
+   // cout<< node1 -> data <<endl;
+   // cout<< node1 -> next <<endl;
+   Node* head = node1;
+   Node* tail = node1;
+   print (head);
+   /*InsertAtHead(tail,15);
+   print(head);
+   InsertAtHead(tail,12);
+   print(head);*/
+
+   InsertAtTail(tail,15);
+   print(head);
+   InsertAtTail(tail,12);
+   print(head);
+   
+   InsertAtposition(head,tail,3,45);
+   print(head);
+   cout<<"head"<<head -> data <<endl;
+   cout<<"tail"<<tail -> data <<endl;
+
+   DeleteNode(1,head);
+   print(head);
+}
